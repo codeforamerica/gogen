@@ -1,7 +1,15 @@
-# README
+# Gogen
 
-This is a command-line tool that takes in a CA Department of Justice (DOJ) .dat file containing criminal record data and identifies convictions eligible for relief under CA Prop 64. 
-The output is a CSV file that contains all the original data from the DOJ as well as eligibility info for relevant convictions.
+`gogen` is a command-line tool that takes in California Department of Justice (CA DOJ) .dat files containing criminal record data and identifies convictions eligible for relief under California's Proposition 64.  
+The output is a bundle of CSV files that contain original data from the CA DOJ as well as eligibility info for relevant convictions.
+
+This tool is intended for use with (and is packaged within) [B.E.A.R.](https://github.com/codeforamerica/bear).
+
+## About
+
+This application was developed by Code for America's [Clear My Record team](https://www.codeforamerica.org/programs/clear-my-record).
+
+For more information about Clear My Record and how you might use this tool, visit our [H&S§11361.9 Implementation Toolkit](https://www.codeforamerica.org/programs/clear-my-record).
 
 ## Prerequisites
 
@@ -29,16 +37,26 @@ We have created test fixture files that mimic the structure of the DOJ files, an
 
 To compile and run gogen, run:
 ```
-$ go run gogen run --input-doj=/Users/[username]/go/src/gogen/test_fixtures/no_headers.csv --county="SAN JOAQUIN" --outputs=[path_to_desired_output_location]
+$ go run gogen run
+    --input-doj=/Users/[username]/go/src/gogen/test_fixtures/no_headers.csv
+    --county="SAN JOAQUIN"
+    --compute-at=2020-07-01
+    --eligibility-options=/path/to/bearConfig.json
+    --outputs=/path/to/desired/output
 ```
 
 If you would like to create a compiled artifact of gogen and install it (e.g. for use with BEAR), run the following commands from project root:
 ```
 $ go build .
 $ go install -i gogen
-$ gogen run --input-doj=/Users/[username]/go/src/gogen/test_fixtures/no_headers.csv --county="SAN JOAQUIN" --outputs=[path_to_desired_output_location]`
+$ gogen run 
+    --input-doj=/Users/[username]/go/src/gogen/test_fixtures/no_headers.csv
+    --county="SAN JOAQUIN"
+    --compute-at=2020-07-01
+    --eligibility-options=/path/to/bearConfig.json
+    --outputs=/path/to/desired/output
 ```
  
 ## License
 
-TBD
+MIT. Please see LICENSE and NOTICE.md.
