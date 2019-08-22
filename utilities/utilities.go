@@ -21,8 +21,8 @@ const (
 )
 
 type GogenError struct {
-	ExitCode     int
-	ErrorMessage string
+	ExitCode     int    `json:"exitCode"`
+	ErrorMessage string `json:"errorMessage"`
 }
 
 func (g *GogenError) Error() string {
