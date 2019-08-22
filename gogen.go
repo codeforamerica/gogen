@@ -50,7 +50,7 @@ func (r runOpts) Execute(args []string) error {
 	utilities.SetErrorFileName(utilities.GenerateFileName(r.OutputFolder, "gogen%s.err", r.FileNameSuffix))
 
 	if r.OutputFolder == "" || r.DOJFiles == "" || r.County == "" || r.EligibilityOptions == "" {
-		utilities.ExitWithError(errors.New("missing required field: Run gogen --help for more info"), utilities.INVALID_RUN_OPTION_ERROR)
+		utilities.ExitWithError(errors.New("missing required field: Run gogen --help for more info"))
 	}
 
 	inputFiles := strings.Split(r.DOJFiles, ",")
@@ -60,7 +60,7 @@ func (r runOpts) Execute(args []string) error {
 	if r.ComputeAt != "" {
 		computeAtOption, err := time.Parse("2006-01-02", r.ComputeAt)
 		if err != nil {
-			utilities.ExitWithError(errors.New("invalid --compute-at date: Must be a valid date in the format YYYY-MM-DD"), utilities.INVALID_RUN_OPTION_ERROR)
+			utilities.ExitWithError(errors.New("invalid --compute-at date: Must be a valid date in the format YYYY-MM-DD"))
 		} else {
 			computeAtDate = computeAtOption
 		}
@@ -71,22 +71,22 @@ func (r runOpts) Execute(args []string) error {
 	var options data.EligibilityOptions
 	optionsFile, err := os.Open(r.EligibilityOptions)
 	if err != nil {
-		utilities.ExitWithError(err, utilities.INVALID_RUN_OPTION_ERROR)
+		utilities.ExitWithError(err)
 	}
 	defer optionsFile.Close()
 
 	optionsBytes, err := ioutil.ReadAll(optionsFile)
 	if err != nil {
-		utilities.ExitWithError(err, utilities.INVALID_RUN_OPTION_ERROR)
+		utilities.ExitWithError(err)
 	}
 
 	err = json.Unmarshal(optionsBytes, &options)
 	if err != nil {
-		utilities.ExitWithError(err, utilities.INVALID_RUN_OPTION_ERROR)
+		utilities.ExitWithError(err)
 	}
 	configurableEligibilityFlow, err = data.NewConfigurableEligibilityFlow(options, r.County)
 	if err != nil {
-		utilities.ExitWithError(err, utilities.INVALID_ELIGIBILITY_OPTION_ERROR)
+		utilities.ExitWithError(err)
 	}
 
 	runErrors := make(map[string]utilities.GogenError)
@@ -99,7 +99,7 @@ func (r runOpts) Execute(args []string) error {
 		fileOutputFolder := utilities.GenerateIndexedOutputFolder(r.OutputFolder, fileIndex, r.FileNameSuffix)
 		err := os.MkdirAll(fileOutputFolder, os.ModePerm)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.OTHER_ERROR, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
 			continue
 		}
 		dojInformation, gogenErr := data.NewDOJInformation(inputFile, computeAtDate, configurableEligibilityFlow)
@@ -118,17 +118,17 @@ func (r runOpts) Execute(args []string) error {
 
 		dojWriter, err := exporter.NewDOJWriter(dojFilePath)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.OTHER_ERROR, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
 			continue
 		}
 		condensedDojWriter, err := exporter.NewCondensedDOJWriter(condensedFilePath)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.OTHER_ERROR, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
 			continue
 		}
 		prop64ConvictionsDojWriter, err := exporter.NewDOJWriter(prop64ConvictionsFilePath)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.OTHER_ERROR, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
 			continue
 		}
 
@@ -168,11 +168,11 @@ func ExportSummary(summary exporter.Summary, startTime time.Time, filePath strin
 
 	s, err := json.Marshal(summary)
 	if err != nil {
-		utilities.ExitWithError(err, utilities.OTHER_ERROR)
+		utilities.ExitWithError(err)
 	}
 	err = ioutil.WriteFile(filePath, s, 0644)
 	if err != nil {
-		utilities.ExitWithError(err, utilities.OTHER_ERROR)
+		utilities.ExitWithError(err)
 	}
 }
 

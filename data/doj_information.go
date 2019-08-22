@@ -130,7 +130,7 @@ func (i *DOJInformation) CountIndividualsNoLongerHaveConvictionInLast7Years(elig
 func NewDOJInformation(dojFileName string, comparisonTime time.Time, eligibilityFlow EligibilityFlow) (*DOJInformation, utilities.GogenError) {
 	dojFile, err := os.Open(dojFileName)
 	if err != nil {
-		return nil, utilities.GogenError{ExitCode: utilities.OTHER_ERROR, ErrorMessage: err.Error()}
+		return nil, utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
 	}
 
 	bufferedReader := bufio.NewReader(dojFile)
@@ -138,7 +138,7 @@ func NewDOJInformation(dojFileName string, comparisonTime time.Time, eligibility
 
 	hasHeaders, err := includesHeaders(bufferedReader)
 	if err != nil {
-		return nil, utilities.GogenError{ExitCode: utilities.OTHER_ERROR, ErrorMessage: err.Error()}
+		return nil, utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
 	}
 	if hasHeaders {
 		bufferedReader.ReadLine() // read and discard header row

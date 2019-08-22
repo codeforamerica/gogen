@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	OTHER_ERROR                      = 1
+	ERROR_EXIT                       = 1
 	FILE_PARSING_ERROR               = 2
 	INVALID_RUN_OPTION_ERROR         = 3
 	INVALID_ELIGIBILITY_OPTION_ERROR = 4
@@ -66,9 +66,9 @@ func SetErrorFileName(filename string) {
 	errorFileName = filename
 }
 
-func ExitWithError(originalError error, exitCode int) {
+func ExitWithError(originalError error) {
 	errorMap := map[string]GogenError{
-		"": {ExitCode: exitCode, ErrorMessage: originalError.Error()},
+		"": {ExitCode: ERROR_EXIT, ErrorMessage: originalError.Error()},
 	}
 	ExitWithErrors(errorMap)
 }
@@ -77,21 +77,13 @@ func ExitWithErrors(originalErrors map[string]GogenError) {
 	s, err := json.Marshal(originalErrors)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(OTHER_ERROR)
+		os.Exit(ERROR_EXIT)
 	}
 
 	err = ioutil.WriteFile(errorFileName, s, 0644)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(OTHER_ERROR)
-	}
-
-	var exitCode int
-
-	for _, gogenError := range originalErrors {
-		if exitCode == 0 || gogenError.ExitCode == OTHER_ERROR{
-			exitCode = gogenError.ExitCode
-		}
+		os.Exit(ERROR_EXIT)
 	}
 
 	fileNames := make([]string, 0, len(originalErrors))
@@ -104,7 +96,7 @@ func ExitWithErrors(originalErrors map[string]GogenError) {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", fileName, originalErrors[fileName].ErrorMessage)
 	}
 
-	os.Exit(exitCode)
+	os.Exit(ERROR_EXIT)
 }
 
 func GenerateFileName(outputFolder string, template string, suffix string) string {
@@ -132,7 +124,7 @@ func GenerateIndexedOutputFolder(outputFolder string, fileIndex int, suffix stri
 func GetOutputWriter(filePath string) io.Writer {
 	summaryFile, err := os.Create(filePath)
 	if err != nil {
-		ExitWithError(err, OTHER_ERROR)
+		ExitWithError(err)
 	}
 	summaryWriter := io.MultiWriter(os.Stdout, summaryFile)
 	return summaryWriter
