@@ -14,14 +14,12 @@ import (
 )
 
 const (
-	ERROR_EXIT                       = 1
-	FILE_PARSING_ERROR               = 2
-	INVALID_RUN_OPTION_ERROR         = 3
-	INVALID_ELIGIBILITY_OPTION_ERROR = 4
+	ERROR_EXIT         = 1
+	FILE_PARSING_ERROR = 2
 )
 
 type GogenError struct {
-	ExitCode     int    `json:"exitCode"`
+	ErrorType    string `json:"errorType"`
 	ErrorMessage string `json:"errorMessage"`
 }
 
@@ -68,7 +66,7 @@ func SetErrorFileName(filename string) {
 
 func ExitWithError(originalError error) {
 	errorMap := map[string]GogenError{
-		"": {ExitCode: ERROR_EXIT, ErrorMessage: originalError.Error()},
+		"": {ErrorType: "OTHER", ErrorMessage: originalError.Error()},
 	}
 	ExitWithErrors(errorMap)
 }

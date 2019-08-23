@@ -201,7 +201,7 @@ var _ = Describe("gogen", func() {
 		errors := GetErrors(expectedErrorFileName)
 		Expect(errors).To(gstruct.MatchAllKeys(gstruct.Keys{
 			"": gstruct.MatchAllFields(gstruct.Fields{
-				"ExitCode":     Equal(utilities.ERROR_EXIT),
+				"ErrorType":    Equal("OTHER"),
 				"ErrorMessage": Equal("missing required field: Run gogen --help for more info"),
 			}),
 		}))
@@ -242,7 +242,7 @@ var _ = Describe("gogen", func() {
 		errors := GetErrors(expectedErrorFileName)
 		Expect(errors).To(gstruct.MatchAllKeys(gstruct.Keys{
 			pathToDOJ: gstruct.MatchAllFields(gstruct.Fields{
-				"ExitCode":     Equal(utilities.ERROR_EXIT),
+				"ErrorType":    Equal("OTHER"),
 				"ErrorMessage": Equal(fmt.Sprintf("open %s: no such file or directory", pathToDOJ)),
 			}),
 		}))
@@ -283,7 +283,7 @@ var _ = Describe("gogen", func() {
 		errors := GetErrors(expectedErrorFileName)
 		Expect(errors).To(gstruct.MatchAllKeys(gstruct.Keys{
 			pathToDOJ: gstruct.MatchAllFields(gstruct.Fields{
-				"ExitCode":     Equal(utilities.FILE_PARSING_ERROR),
+				"ErrorType":    Equal("PARSING"),
 				"ErrorMessage": Equal("record on line 2: wrong number of fields"),
 			}),
 		}))
@@ -508,11 +508,11 @@ var _ = Describe("gogen", func() {
 			errors := GetErrors(expectedErrorFileName)
 			Expect(errors).To(gstruct.MatchAllKeys(gstruct.Keys{
 				pathToMissingDOJ: gstruct.MatchAllFields(gstruct.Fields{
-					"ExitCode":     Equal(utilities.ERROR_EXIT),
+					"ErrorType":    Equal("OTHER"),
 					"ErrorMessage": Equal(fmt.Sprintf("open %s: no such file or directory", pathToMissingDOJ)),
 				}),
 				pathToBadDOJ: gstruct.MatchAllFields(gstruct.Fields{
-					"ExitCode":     Equal(utilities.FILE_PARSING_ERROR),
+					"ErrorType":    Equal("PARSING"),
 					"ErrorMessage": Equal("record on line 2: wrong number of fields"),
 				}),
 			}))
