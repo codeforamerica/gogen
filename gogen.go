@@ -99,11 +99,11 @@ func (r runOpts) Execute(args []string) error {
 		fileOutputFolder := utilities.GenerateIndexedOutputFolder(r.OutputFolder, fileIndex, r.FileNameSuffix)
 		err := os.MkdirAll(fileOutputFolder, os.ModePerm)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}
 			continue
 		}
 		dojInformation, gogenErr := data.NewDOJInformation(inputFile, computeAtDate, configurableEligibilityFlow)
-		if gogenErr.ExitCode != 0 {
+		if gogenErr.ErrorType != "" {
 			runErrors[inputFile] = gogenErr
 			continue
 		}
@@ -118,17 +118,17 @@ func (r runOpts) Execute(args []string) error {
 
 		dojWriter, err := exporter.NewDOJWriter(dojFilePath)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}
 			continue
 		}
 		condensedDojWriter, err := exporter.NewCondensedDOJWriter(condensedFilePath)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}
 			continue
 		}
 		prop64ConvictionsDojWriter, err := exporter.NewDOJWriter(prop64ConvictionsFilePath)
 		if err != nil {
-			runErrors[inputFile] = utilities.GogenError{ExitCode: utilities.ERROR_EXIT, ErrorMessage: err.Error()}
+			runErrors[inputFile] = utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}
 			continue
 		}
 
@@ -155,7 +155,7 @@ func (r runOpts) Execute(args []string) error {
 
 func encounteredErrors(runErrors map[string]utilities.GogenError) bool {
 	for _, value := range runErrors {
-		if value.ExitCode != 0 {
+		if value.ErrorType != "" {
 			return true
 		}
 	}
