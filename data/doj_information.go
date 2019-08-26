@@ -135,6 +135,7 @@ func NewDOJInformation(dojFileName string, comparisonTime time.Time, eligibility
 
 	bufferedReader := bufio.NewReader(dojFile)
 	sourceCSV := csv.NewReader(bufferedReader)
+	sourceCSV.FieldsPerRecord = END_OF_REC + 1;
 
 	hasHeaders, err := includesHeaders(bufferedReader)
 	if err != nil {

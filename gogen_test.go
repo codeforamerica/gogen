@@ -275,7 +275,7 @@ var _ = Describe("gogen", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		Eventually(session).Should(gexec.Exit(utilities.ERROR_EXIT))
-		Eventually(session.Err).Should(gbytes.Say("record on line 2: wrong number of fields"))
+		Eventually(session.Err).Should(gbytes.Say("record on line 1: wrong number of fields"))
 
 		expectedErrorFileName := fmt.Sprintf("%v/gogen_%s.err", outputDir, filenameSuffix)
 
@@ -284,7 +284,7 @@ var _ = Describe("gogen", func() {
 		Expect(errors).To(gstruct.MatchAllKeys(gstruct.Keys{
 			pathToDOJ: gstruct.MatchAllFields(gstruct.Fields{
 				"ErrorType":    Equal("PARSING"),
-				"ErrorMessage": Equal("record on line 2: wrong number of fields"),
+				"ErrorMessage": Equal("record on line 1: wrong number of fields"),
 			}),
 		}))
 	})
@@ -499,7 +499,7 @@ var _ = Describe("gogen", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			Eventually(session).Should(gexec.Exit(utilities.ERROR_EXIT))
-			Eventually(session.Err).Should(gbytes.Say("record on line 2: wrong number of fields"))
+			Eventually(session.Err).Should(gbytes.Say("record on line 1: wrong number of fields"))
 			Eventually(session.Err).Should(gbytes.Say("open .*missing.csv: no such file or directory"))
 
 			expectedErrorFileName := fmt.Sprintf("%v/gogen_%s.err", outputDir, filenameSuffix)
@@ -513,7 +513,7 @@ var _ = Describe("gogen", func() {
 				}),
 				pathToBadDOJ: gstruct.MatchAllFields(gstruct.Fields{
 					"ErrorType":    Equal("PARSING"),
-					"ErrorMessage": Equal("record on line 2: wrong number of fields"),
+					"ErrorMessage": Equal("record on line 1: wrong number of fields"),
 				}),
 			}))
 		})
