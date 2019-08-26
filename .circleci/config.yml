@@ -70,14 +70,10 @@ workflows:
   build-workflow:
     jobs:
       - test-and-build
-      - hold:
-          type: approval
+      - deploy:
           requires:
             - test-and-build
           filters:
             branches:
               only:
                 - master
-      - deploy:
-          requires:
-            - hold
