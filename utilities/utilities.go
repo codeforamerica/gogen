@@ -3,7 +3,6 @@ package utilities
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"math"
 	"os"
@@ -40,13 +39,6 @@ func PrintProgressBar(index, totalRows int, totalTime time.Duration, tail string
 
 func AverageTime(totalTime time.Duration, index int) time.Duration {
 	return time.Duration(float64(totalTime) / float64(index))
-}
-
-func Percent(num int, denom int) int {
-	if denom == 0 {
-		return 0
-	}
-	return num * 100 / denom
 }
 
 func AddMaps(map1 map[string]int, map2 map[string]int) map[string]int {
@@ -109,13 +101,4 @@ func GenerateIndexedFileName(outputFolder string, template string, fileIndex int
 		suffix = "_" + suffix
 	}
 	return filepath.Join(outputFolder, fmt.Sprintf(template, fileIndex, suffix))
-}
-
-func GetOutputWriter(filePath string) io.Writer {
-	summaryFile, err := os.Create(filePath)
-	if err != nil {
-		ExitWithError(err)
-	}
-	summaryWriter := io.MultiWriter(os.Stdout, summaryFile)
-	return summaryWriter
 }
