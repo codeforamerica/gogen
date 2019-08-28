@@ -111,14 +111,6 @@ func GenerateIndexedFileName(outputFolder string, template string, fileIndex int
 	return filepath.Join(outputFolder, fmt.Sprintf(template, fileIndex, suffix))
 }
 
-func GenerateIndexedOutputFolder(outputFolder string, fileIndex int, suffix string) string {
-	if suffix != "" {
-		suffix = "_" + suffix
-	}
-
-	return filepath.Join(outputFolder, fmt.Sprintf("DOJ_Input_File_%d_Results%s", fileIndex, suffix))
-}
-
 func GetOutputWriter(filePath string) io.Writer {
 	summaryFile, err := os.Create(filePath)
 	if err != nil {

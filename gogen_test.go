@@ -157,10 +157,9 @@ var _ = Describe("gogen", func() {
 
 		Eventually(session).Should(gexec.Exit(0))
 
-		fileResultsOutputDir := path.Join(outputDir, fmt.Sprintf("DOJ_Input_File_1_Results_%s", dateSuffix))
-		expectedDojResultsFileName := fmt.Sprintf("%v/All_Results_1_%s.csv", fileResultsOutputDir, dateSuffix)
-		expectedCondensedFileName := fmt.Sprintf("%v/All_Results_Condensed_1_%s.csv", fileResultsOutputDir, dateSuffix)
-		expectedConvictionsFileName := fmt.Sprintf("%v/Prop64_Results_1_%s.csv", fileResultsOutputDir, dateSuffix)
+		expectedDojResultsFileName := fmt.Sprintf("%v/All_Results_1_%s.csv", outputDir, dateSuffix)
+		expectedCondensedFileName := fmt.Sprintf("%v/All_Results_Condensed_1_%s.csv", outputDir, dateSuffix)
+		expectedConvictionsFileName := fmt.Sprintf("%v/Prop64_Results_1_%s.csv", outputDir, dateSuffix)
 		expectedJsonOutputFileName := fmt.Sprintf("%v/gogen_%s.json", outputDir, dateSuffix)
 
 		Ω(expectedDojResultsFileName).Should(BeAnExistingFile())
@@ -383,14 +382,12 @@ var _ = Describe("gogen", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			Eventually(session).Should(gexec.Exit(0))
-			file1OutputDir := path.Join(outputDir, "DOJ_Input_File_1_Results")
-			file2OutputDir := path.Join(outputDir, "DOJ_Input_File_2_Results")
-			expectedDojResultsFile1Name := fmt.Sprintf("%v/All_Results_1.csv", file1OutputDir)
-			expectedDojResultsFile2Name := fmt.Sprintf("%v/All_Results_2.csv", file2OutputDir)
-			expectedCondensedFile1Name := fmt.Sprintf("%v/All_Results_Condensed_1.csv", file1OutputDir)
-			expectedCondensedFile2Name := fmt.Sprintf("%v/All_Results_Condensed_2.csv", file2OutputDir)
-			expectedConvictionsFile1Name := fmt.Sprintf("%v/Prop64_Results_1.csv", file1OutputDir)
-			expectedConvictionsFile2Name := fmt.Sprintf("%v/Prop64_Results_2.csv", file2OutputDir)
+			expectedDojResultsFile1Name := fmt.Sprintf("%v/All_Results_1.csv", outputDir)
+			expectedDojResultsFile2Name := fmt.Sprintf("%v/All_Results_2.csv", outputDir)
+			expectedCondensedFile1Name := fmt.Sprintf("%v/All_Results_Condensed_1.csv", outputDir)
+			expectedCondensedFile2Name := fmt.Sprintf("%v/All_Results_Condensed_2.csv", outputDir)
+			expectedConvictionsFile1Name := fmt.Sprintf("%v/Prop64_Results_1.csv", outputDir)
+			expectedConvictionsFile2Name := fmt.Sprintf("%v/Prop64_Results_2.csv", outputDir)
 			expectedJsonOutputFileName := fmt.Sprintf("%v/gogen.json", outputDir)
 
 			Ω(expectedDojResultsFile1Name).Should(BeAnExistingFile())
