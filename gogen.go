@@ -111,9 +111,9 @@ func (r runOpts) Execute(args []string) error {
 		dismissAllProp64Eligibilities := dojInformation.DetermineEligibility(r.County, data.EligibilityFlows["DISMISS ALL PROP 64"])
 		dismissAllProp64AndRelatedEligibilities := dojInformation.DetermineEligibility(r.County, data.EligibilityFlows["DISMISS ALL PROP 64 AND RELATED"])
 
-		dojFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results_%d%s.csv", fileIndex, r.FileNameSuffix)
-		condensedFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results_Condensed_%d%s.csv", fileIndex, r.FileNameSuffix)
-		prop64ConvictionsFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "Prop64_Results_%d%s.csv", fileIndex, r.FileNameSuffix)
+		dojFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
+		condensedFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results_Condensed%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
+		prop64ConvictionsFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "Prop64_Results%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
 
 		dojWriter, err := exporter.NewDOJWriter(dojFilePath)
 		if err != nil {

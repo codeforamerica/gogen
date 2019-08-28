@@ -157,9 +157,9 @@ var _ = Describe("gogen", func() {
 
 		Eventually(session).Should(gexec.Exit(0))
 
-		expectedDojResultsFileName := fmt.Sprintf("%v/All_Results_1_%s.csv", outputDir, dateSuffix)
-		expectedCondensedFileName := fmt.Sprintf("%v/All_Results_Condensed_1_%s.csv", outputDir, dateSuffix)
-		expectedConvictionsFileName := fmt.Sprintf("%v/Prop64_Results_1_%s.csv", outputDir, dateSuffix)
+		expectedDojResultsFileName := fmt.Sprintf("%v/All_Results_%s.csv", outputDir, dateSuffix)
+		expectedCondensedFileName := fmt.Sprintf("%v/All_Results_Condensed_%s.csv", outputDir, dateSuffix)
+		expectedConvictionsFileName := fmt.Sprintf("%v/Prop64_Results_%s.csv", outputDir, dateSuffix)
 		expectedJsonOutputFileName := fmt.Sprintf("%v/gogen_%s.json", outputDir, dateSuffix)
 
 		Ω(expectedDojResultsFileName).Should(BeAnExistingFile())

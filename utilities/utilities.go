@@ -96,9 +96,12 @@ func GenerateFileName(outputFolder string, template string, suffix string) strin
 	return filepath.Join(outputFolder, fmt.Sprintf(template, suffix))
 }
 
-func GenerateIndexedFileName(outputFolder string, template string, fileIndex int, suffix string) string {
+func GenerateIndexedFileName(outputFolder string, template string, fileIndex int, numFiles int, suffix string) string {
 	if suffix != "" {
 		suffix = "_" + suffix
 	}
-	return filepath.Join(outputFolder, fmt.Sprintf(template, fileIndex, suffix))
+	if numFiles > 1 {
+		suffix = fmt.Sprintf("_%d", fileIndex) + suffix
+	}
+	return filepath.Join(outputFolder, fmt.Sprintf(template, suffix))
 }
