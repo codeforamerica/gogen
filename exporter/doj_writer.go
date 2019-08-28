@@ -11,6 +11,7 @@ import (
 var EligiblityHeaders = []string{
 	"Case Number",
 	"# of convictions on record",
+	"Occurred after 11/9/2016",
 	"Superstrike Code Section(s)",
 	"PC290 Code Section(s)",
 	"PC290 Registration",
@@ -194,6 +195,7 @@ func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.Eli
 		eligibilityCols = []string{
 			info.CaseNumber,
 			writeInt(info.NumberOfConvictionsOnRecord),
+			info.OccurredAfterEffectiveDate,
 			info.Superstrikes,
 			info.PC290CodeSections,
 			info.PC290Registration,
