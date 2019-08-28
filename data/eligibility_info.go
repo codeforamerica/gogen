@@ -17,6 +17,7 @@ type EligibilityInfo struct {
 	NumberOf11359Convictions       int
 	NumberOf11360Convictions       int
 	comparisonTime                 time.Time
+	OccurredAfterEffectiveDate     string
 	Superstrikes                   string
 	PC290CodeSections              string
 	PC290Registration              string
@@ -40,6 +41,12 @@ func NewEligibilityInfo(row *DOJRow, subject *Subject, comparisonTime time.Time,
 		info.Deceased = "Deceased"
 	} else {
 		info.Deceased = "-"
+	}
+
+	if row.DispositionDate.After(time.Date(2016, 11, 9, 0, 0, 0, 0, time.UTC)) {
+		info.OccurredAfterEffectiveDate = "Y"
+	} else {
+		info.OccurredAfterEffectiveDate = "N"
 	}
 
 	if subject.PC290Registration {

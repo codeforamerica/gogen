@@ -126,7 +126,7 @@ var _ = Describe("gogen", func() {
 		Eventually(session).Should(gexec.Exit(0))
 		Expect(session.Err).ToNot(gbytes.Say("required"))
 		summary := GetOutputSummary(path.Join(outputDir, "gogen.json"))
-		Expect(summary.LineCount).To(Equal(37))
+		Expect(summary.LineCount).To(Equal(38))
 	})
 
 	It("can accept a suffix for the output file names", func() {
@@ -318,31 +318,31 @@ var _ = Describe("gogen", func() {
 		summary := GetOutputSummary(path.Join(outputDir, "gogen.json"))
 		Expect(summary).To(gstruct.MatchAllFields(gstruct.Fields{
 			"County":                  Equal("SACRAMENTO"),
-			"LineCount":               Equal(37),
+			"LineCount":               Equal(38),
 			"ProcessingTimeInSeconds": BeNumerically(">", 0),
 			"EarliestConviction":      Equal(time.Date(1979, 6, 1, 0, 0, 0, 0, time.UTC)),
 			"ReliefWithCurrentEligibilityChoices": gstruct.MatchAllKeys(gstruct.Keys{
-				"CountSubjectsNoFelony":               Equal(4),
-				"CountSubjectsNoConviction":           Equal(3),
-				"CountSubjectsNoConvictionLast7Years": Equal(1),
+				"CountSubjectsNoFelony":               Equal(5),
+				"CountSubjectsNoConviction":           Equal(4),
+				"CountSubjectsNoConvictionLast7Years": Equal(2),
 			}),
 			"ReliefWithDismissAllProp64": gstruct.MatchAllKeys(gstruct.Keys{
-				"CountSubjectsNoFelony":               Equal(4),
-				"CountSubjectsNoConviction":           Equal(3),
-				"CountSubjectsNoConvictionLast7Years": Equal(1),
+				"CountSubjectsNoFelony":               Equal(5),
+				"CountSubjectsNoConviction":           Equal(4),
+				"CountSubjectsNoConvictionLast7Years": Equal(2),
 			}),
 			"Prop64ConvictionsCountInCountyByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
 				"11357": Equal(3),
-				"11358": Equal(6),
+				"11358": Equal(7),
 				"11359": Equal(8),
 			}),
-			"SubjectsWithProp64ConvictionCountInCounty": Equal(11),
-			"Prop64FelonyConvictionsCountInCounty":      Equal(14),
+			"SubjectsWithProp64ConvictionCountInCounty": Equal(12),
+			"Prop64FelonyConvictionsCountInCounty":      Equal(15),
 			"Prop64NonFelonyConvictionsCountInCounty":   Equal(3),
-			"SubjectsWithSomeReliefCount":               Equal(11),
+			"SubjectsWithSomeReliefCount":               Equal(12),
 			"ConvictionDismissalCountByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
 				"11357": Equal(2),
-				"11358": Equal(5),
+				"11358": Equal(6),
 			}),
 			"ConvictionReductionCountByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
 				"11359": Equal(1),
@@ -430,31 +430,31 @@ var _ = Describe("gogen", func() {
 			summary := GetOutputSummary(path.Join(outputDir, "gogen.json"))
 			Expect(summary).To(gstruct.MatchAllFields(gstruct.Fields{
 				"County":                  Equal("SACRAMENTO"),
-				"LineCount":               Equal(74),
+				"LineCount":               Equal(76),
 				"EarliestConviction":      Equal(time.Date(1979, 6, 1, 0, 0, 0, 0, time.UTC)),
 				"ProcessingTimeInSeconds": BeNumerically(">", 0),
 				"ReliefWithCurrentEligibilityChoices": gstruct.MatchAllKeys(gstruct.Keys{
-					"CountSubjectsNoFelony":               Equal(8),
-					"CountSubjectsNoConviction":           Equal(6),
-					"CountSubjectsNoConvictionLast7Years": Equal(2),
+					"CountSubjectsNoFelony":               Equal(10),
+					"CountSubjectsNoConviction":           Equal(8),
+					"CountSubjectsNoConvictionLast7Years": Equal(4),
 				}),
 				"ReliefWithDismissAllProp64": gstruct.MatchAllKeys(gstruct.Keys{
-					"CountSubjectsNoFelony":               Equal(8),
-					"CountSubjectsNoConviction":           Equal(6),
-					"CountSubjectsNoConvictionLast7Years": Equal(2),
+					"CountSubjectsNoFelony":               Equal(10),
+					"CountSubjectsNoConviction":           Equal(8),
+					"CountSubjectsNoConvictionLast7Years": Equal(4),
 				}),
 				"Prop64ConvictionsCountInCountyByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
 					"11357": Equal(6),
-					"11358": Equal(12),
+					"11358": Equal(14),
 					"11359": Equal(16),
 				}),
-				"SubjectsWithProp64ConvictionCountInCounty": Equal(22),
-				"Prop64FelonyConvictionsCountInCounty":      Equal(28),
+				"SubjectsWithProp64ConvictionCountInCounty": Equal(24),
+				"Prop64FelonyConvictionsCountInCounty":      Equal(30),
 				"Prop64NonFelonyConvictionsCountInCounty":   Equal(6),
-				"SubjectsWithSomeReliefCount":               Equal(22),
+				"SubjectsWithSomeReliefCount":               Equal(24),
 				"ConvictionDismissalCountByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
 					"11357": Equal(4),
-					"11358": Equal(10),
+					"11358": Equal(12),
 				}),
 				"ConvictionReductionCountByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
 					"11359": Equal(2),
