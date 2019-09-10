@@ -5,7 +5,6 @@ import (
 	"gogen/data"
 	"gogen/matchers"
 	"gogen/utilities"
-	"sort"
 	"strings"
 	"time"
 )
@@ -61,10 +60,11 @@ func NewDataExporter(
 
 func (d *DataExporter) Export(county string, configurableEligibilityFlow data.ConfigurableEligibilityFlow) Summary {
 	for i, row := range d.dojInformation.Rows {
-		d.outputDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i])
-		d.outputCondensedDOJWriter.WriteCondensedEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i])
+		possibleOtherP64Charges := possibleP64ChargeOnlyInComment(row, d.normalFlowEligibilities[i])
+		d.outputDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
+		d.outputCondensedDOJWriter.WriteCondensedEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
 		if d.normalFlowEligibilities[i] != nil {
-			d.outputProp64ConvictionsDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i])
+			d.outputProp64ConvictionsDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
 		}
 	}
 
@@ -72,6 +72,15 @@ func (d *DataExporter) Export(county string, configurableEligibilityFlow data.Co
 	d.outputCondensedDOJWriter.Flush()
 	d.outputProp64ConvictionsDOJWriter.Flush()
 	return d.NewSummary(county, configurableEligibilityFlow)
+}
+
+func possibleP64ChargeOnlyInComment(row []string, info *data.EligibilityInfo) string {
+	if info == nil && matchers.IsProp64Charge(row[data.COMMENT_TEXT]) {
+		return row[data.COMMENT_TEXT]
+	} else {
+		return ""
+	}
+
 }
 
 func (d *DataExporter) AccumulateSummaryData(runSummary Summary, fileSummary Summary) Summary {
@@ -123,23 +132,6 @@ func findEarliest(time1 time.Time, time2 time.Time) time.Time {
 		return time1
 	}
 	return time2
-}
-
-func getSortedKeys(mapWithStringKeys map[string]int) []string {
-	keys := make([]string, 0, len(mapWithStringKeys))
-	for key := range mapWithStringKeys {
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-	return keys
-}
-
-func sumValues(mapOfInts map[string]int) int {
-	total := 0
-	for _, value := range mapOfInts {
-		total += value
-	}
-	return total
 }
 
 func (d *DataExporter) getDismissalsByCodeSection(county string, configurableEligibilityFlow data.ConfigurableEligibilityFlow) map[string]int {

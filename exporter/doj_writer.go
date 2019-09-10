@@ -11,6 +11,7 @@ import (
 var EligiblityHeaders = []string{
 	"Case Number",
 	"# of convictions on record",
+	"Possible Other P64 Charges",
 	"Occurred after 11/9/2016",
 	"Superstrike Code Section(s)",
 	"PC290 Code Section(s)",
@@ -149,8 +150,8 @@ var DojCondensedHeaders = []string{
 }
 
 type DOJWriter interface {
-	WriteEntryWithEligibilityInfo([]string, *data.EligibilityInfo)
-	WriteCondensedEntryWithEligibilityInfo([]string, *data.EligibilityInfo)
+	WriteEntryWithEligibilityInfo([]string, *data.EligibilityInfo, string)
+	WriteCondensedEntryWithEligibilityInfo([]string, *data.EligibilityInfo, string)
 	Write([]string)
 	Flush()
 }
@@ -188,13 +189,14 @@ func NewCondensedDOJWriter(outputFilePath string) (DOJWriter, error) {
 	return NewWriter(outputFilePath, headers)
 }
 
-func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo) {
+func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo, possibleOtherP64Charges string) {
 	var eligibilityCols []string
 
 	if info != nil {
 		eligibilityCols = []string{
 			info.CaseNumber,
 			writeInt(info.NumberOfConvictionsOnRecord),
+			possibleOtherP64Charges,
 			info.OccurredAfterEffectiveDate,
 			info.Superstrikes,
 			info.PC290CodeSections,
@@ -213,12 +215,13 @@ func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.Eli
 		}
 	} else {
 		eligibilityCols = make([]string, len(EligiblityHeaders))
+		eligibilityCols[2] = possibleOtherP64Charges
 	}
 
 	cw.Write(append(entry, eligibilityCols...))
 }
 
-func (cw csvWriter) WriteCondensedEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo) {
+func (cw csvWriter) WriteCondensedEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo, possibleOtherP64Charges string) {
 	var condensedRow []string
 
 	includedColumns := []int{
@@ -248,7 +251,7 @@ func (cw csvWriter) WriteCondensedEntryWithEligibilityInfo(entry []string, info 
 		condensedRow = append(condensedRow, entry[col])
 	}
 
-	cw.WriteEntryWithEligibilityInfo(condensedRow, info)
+	cw.WriteEntryWithEligibilityInfo(condensedRow, info, possibleOtherP64Charges)
 }
 
 func writeDate(val time.Time) string {
