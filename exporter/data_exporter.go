@@ -60,7 +60,7 @@ func NewDataExporter(
 
 func (d *DataExporter) Export(county string, configurableEligibilityFlow data.ConfigurableEligibilityFlow) Summary {
 	for i, row := range d.dojInformation.Rows {
-		possibleOtherP64Charges := possibleP64ChargeOnlyInComment(row, d.normalFlowEligibilities[i])
+		possibleOtherP64Charges := PossibleP64ChargeOnlyInComment(row[data.OFFENSE_DESCR], row[data.COMMENT_TEXT])
 		d.outputDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
 		d.outputCondensedDOJWriter.WriteCondensedEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
 		if d.normalFlowEligibilities[i] != nil {
@@ -74,14 +74,37 @@ func (d *DataExporter) Export(county string, configurableEligibilityFlow data.Co
 	return d.NewSummary(county, configurableEligibilityFlow)
 }
 
-func possibleP64ChargeOnlyInComment(row []string, info *data.EligibilityInfo) string {
-	if info == nil && matchers.IsProp64Charge(row[data.COMMENT_TEXT]) {
-		return row[data.COMMENT_TEXT]
-	} else {
-		return ""
+func PossibleP64ChargeOnlyInComment(offenseDescription, commentText string) string {
+	if !data.IsCodeSectionInComment(offenseDescription) {
+		prop64InComment, commentCodeSection := matchers.ExtractProp64Section(commentText)
+		if prop64InComment {
+			prop64InOffenseDescription, offenseDescriptionCodeSection := matchers.ExtractProp64Section(offenseDescription)
+			if !prop64InOffenseDescription {
+				return commentText
+			} else if offenseDescriptionCodeSection != commentCodeSection {
+				return commentText
+			} else if offenseDescriptionCodeSection == "11357" {
+				offenseDescriptionHasSubSection, offenseDescriptionSubSection := matchers.Extract11357SubSection(offenseDescription)
+				commentTextHasSubSection, commentTextSubSection := matchers.Extract11357SubSection(commentText)
+				if offenseDescriptionHasSubSection && commentTextHasSubSection {
+					if (offenseDescriptionSubSection == "A" || offenseDescriptionSubSection == "B") &&
+						(commentTextSubSection == "C" || commentTextSubSection == "D") {
+						return commentText
+					} else if (offenseDescriptionSubSection == "C" || offenseDescriptionSubSection == "D") &&
+						(commentTextSubSection == "A" || commentTextSubSection == "B") {
+						return commentText
+					} else {
+						return ""
+					}
+				} else if commentTextHasSubSection {
+					return commentText
+				}
+			}
+		}
 	}
-
+	return ""
 }
+
 
 func (d *DataExporter) AccumulateSummaryData(runSummary Summary, fileSummary Summary) Summary {
 	return Summary{
