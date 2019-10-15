@@ -27,6 +27,7 @@ var EligiblityHeaders = []string{
 	"Deceased",
 	"Eligibility Determination",
 	"Eligibility Reason",
+	"Potentially Eligible Related Charge",
 }
 
 var DojFullHeaders = []string{
@@ -133,6 +134,7 @@ var DojCondensedHeaders = []string{
 	"PRI_DOB",
 	"RACE_DESCR",
 	"CYC_DATE",
+	"CYC_ORDER",
 	"STP_EVENT_DATE",
 	"STP_ORI_DESCR",
 	"STP_ORI_CNTY_NAME",
@@ -191,7 +193,6 @@ func NewCondensedDOJWriter(outputFilePath string) (DOJWriter, error) {
 
 func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo, possibleOtherP64Charges string) {
 	var eligibilityCols []string
-
 	if info != nil {
 		eligibilityCols = []string{
 			info.CaseNumber,
@@ -212,7 +213,10 @@ func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.Eli
 			info.Deceased,
 			info.EligibilityDetermination,
 			info.EligibilityReason,
+			info.PotentiallyEligibleRelatedConviction,
 		}
+		fmt.Println("og info")
+		fmt.Println(info.PotentiallyEligibleRelatedConviction)
 	} else {
 		eligibilityCols = make([]string, len(EligiblityHeaders))
 		eligibilityCols[2] = possibleOtherP64Charges

@@ -14,6 +14,7 @@ type DataExporter struct {
 	normalFlowEligibilities                 map[int]*data.EligibilityInfo
 	dismissAllProp64Eligibilities           map[int]*data.EligibilityInfo
 	dismissAllProp64AndRelatedEligibilities map[int]*data.EligibilityInfo
+	findRelatedCharges map[int]*data.EligibilityInfo
 	outputDOJWriter                         DOJWriter
 	outputCondensedDOJWriter                DOJWriter
 	outputProp64ConvictionsDOJWriter        DOJWriter
@@ -42,6 +43,7 @@ func NewDataExporter(
 	countyEligibilities map[int]*data.EligibilityInfo,
 	dismissAllProp64Eligibilities map[int]*data.EligibilityInfo,
 	dismissAllProp64AndRelatedEligibilities map[int]*data.EligibilityInfo,
+	findRelatedCharges map[int]*data.EligibilityInfo,
 	outputDOJWriter DOJWriter,
 	outputCondensedDOJWriter DOJWriter,
 	outputProp64ConvictionsDOJWriter DOJWriter,
@@ -52,6 +54,7 @@ func NewDataExporter(
 		normalFlowEligibilities:                 countyEligibilities,
 		dismissAllProp64Eligibilities:           dismissAllProp64Eligibilities,
 		dismissAllProp64AndRelatedEligibilities: dismissAllProp64AndRelatedEligibilities,
+		findRelatedCharges: findRelatedCharges,
 		outputDOJWriter:                         outputDOJWriter,
 		outputCondensedDOJWriter:                outputCondensedDOJWriter,
 		outputProp64ConvictionsDOJWriter:        outputProp64ConvictionsDOJWriter,

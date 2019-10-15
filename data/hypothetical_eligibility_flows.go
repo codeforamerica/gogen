@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"gogen/matchers"
 	"time"
 )
@@ -61,4 +62,35 @@ func (ef dismissAllProp64AndRelatedEligibilityFlow) BeginEligibilityFlow(info *E
 
 func (ef dismissAllProp64AndRelatedEligibilityFlow) checkRelevancy(codeSection string, convictionCounty string, flowCounty string) bool {
 	return convictionCounty == flowCounty && (matchers.IsProp64Charge(codeSection) || matchers.IsRelatedCharge(codeSection))
+}
+
+type findRelatedChargesFlow struct {
+}
+
+func (ef findRelatedChargesFlow) ProcessSubject(subject *Subject, comparisonTime time.Time, county string) map[int]*EligibilityInfo {
+	infos := make(map[int]*EligibilityInfo)
+	for _, event := range subject.ArrestsAndConvictions {
+		// if event is in county
+		// 	if event is arrest with Prop 64 charge
+		// check to see if there are any related charge convictions with same cyc_count
+		if event.County == county {
+			info := NewEligibilityInfo(event, subject, comparisonTime, county)
+			ef.BeginEligibilityFlow(info, event, subject)
+			infos[event.Index] = info
+		}
+	}
+	return infos
+}
+
+func (ef findRelatedChargesFlow) ChecksRelatedCharges() bool {
+	return true
+}
+
+func (ef findRelatedChargesFlow) BeginEligibilityFlow(info *EligibilityInfo, row *DOJRow, subject *Subject) {
+	stpOrder := row.CountOrder[0:3]
+	prop64ArrestInSameCycle := subject.CyclesWithProp64Arrest[stpOrder]
+	fmt.Println(prop64ArrestInSameCycle)
+	if matchers.IsRelatedCharge(row.CodeSection) && prop64ArrestInSameCycle {
+		info.SetPotentiallyEligibleRelatedConviction()
+	}
 }

@@ -28,6 +28,7 @@ type runOpts struct {
 	ComputeAt          string `long:"compute-at" description:"The date for which eligibility will be evaluated, ex: 2020-10-31"`
 	EligibilityOptions string `long:"eligibility-options" description:"File containing options for which eligibility logic to apply"`
 	FileNameSuffix     string `long:"file-name-suffix" hidden:"true" description:"string to append to file names"`
+	//RelatedCharges     string `long"related-charges" description:"Boolean dictating determining eligibility for related charges"`
 }
 
 type exportTestCSVOpts struct {
@@ -110,6 +111,7 @@ func (r runOpts) Execute(args []string) error {
 
 		dismissAllProp64Eligibilities := dojInformation.DetermineEligibility(r.County, data.EligibilityFlows["DISMISS ALL PROP 64"])
 		dismissAllProp64AndRelatedEligibilities := dojInformation.DetermineEligibility(r.County, data.EligibilityFlows["DISMISS ALL PROP 64 AND RELATED"])
+		findRelatedCharges := dojInformation.DetermineEligibility(r.County, data.EligibilityFlows["FIND RELATED CHARGES"])
 
 		dojFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
 		condensedFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results_Condensed%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
@@ -136,6 +138,7 @@ func (r runOpts) Execute(args []string) error {
 			countyEligibilities,
 			dismissAllProp64Eligibilities,
 			dismissAllProp64AndRelatedEligibilities,
+			findRelatedCharges,
 			dojWriter,
 			condensedDojWriter,
 			prop64ConvictionsDojWriter)

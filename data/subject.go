@@ -10,9 +10,11 @@ type Subject struct {
 	Name                    string
 	DOB                     time.Time
 	Convictions             []*DOJRow
+	ArrestsAndConvictions             []*DOJRow
 	seenConvictions         map[string]bool
 	PC290Registration       bool
 	CyclesWithProp64Charges map[string]bool
+	CyclesWithProp64Arrest map[string]bool
 	CaseNumbers             map[string][]string
 	IsDeceased              bool
 }
@@ -24,6 +26,7 @@ func (subject *Subject) PushRow(row DOJRow, eligibilityFlow EligibilityFlow) {
 		subject.DOB = row.DOB
 		subject.seenConvictions = make(map[string]bool)
 		subject.CyclesWithProp64Charges = make(map[string]bool)
+		subject.CyclesWithProp64Arrest = make(map[string]bool)
 		subject.CaseNumbers = make(map[string][]string)
 	}
 	if row.WasConvicted && subject.seenConvictions[row.CountOrder] {
@@ -45,11 +48,18 @@ func (subject *Subject) PushRow(row DOJRow, eligibilityFlow EligibilityFlow) {
 	if row.WasConvicted && !subject.seenConvictions[row.CountOrder] {
 		row.HasProp64ChargeInCycle = subject.CyclesWithProp64Charges[row.CountOrder[0:3]]
 		subject.Convictions = append(subject.Convictions, &row)
+		subject.ArrestsAndConvictions = append(subject.ArrestsAndConvictions, &row)
 		subject.seenConvictions[row.CountOrder] = true
+	}
+	if row.IsArrest {
+		subject.ArrestsAndConvictions = append(subject.ArrestsAndConvictions, &row)
 	}
 
 	if matchers.IsProp64Charge(row.CodeSection) {
 		subject.CyclesWithProp64Charges[row.CountOrder[0:3]] = true
+		if row.IsArrest {
+			subject.CyclesWithProp64Arrest[row.CountOrder[0:3]] = true
+		}
 		for _, conviction := range subject.Convictions {
 			if conviction.CountOrder[0:3] == row.CountOrder[0:3] {
 				conviction.HasProp64ChargeInCycle = true

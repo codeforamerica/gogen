@@ -12,6 +12,7 @@ type EligibilityFlow interface {
 var EligibilityFlows = map[string]EligibilityFlow{
 	"DISMISS ALL PROP 64":             dismissAllProp64EligibilityFlow{},
 	"DISMISS ALL PROP 64 AND RELATED": dismissAllProp64AndRelatedEligibilityFlow{},
+	"FIND RELATED CHARGES": findRelatedChargesFlow{},
 }
 
 type EligibilityOptions struct {

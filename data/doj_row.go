@@ -11,6 +11,7 @@ type DOJRow struct {
 	DOB                    time.Time
 	Name                   string
 	WasConvicted           bool
+	IsArrest               bool
 	CodeSection            string
 	DispositionDate        time.Time
 	OFN                    string
@@ -36,6 +37,7 @@ func NewDOJRow(rawRow []string, index int) DOJRow {
 		SubjectID:            rawRow[SUBJECT_ID],
 		DOB:                  parseDate(dateFormat, rawRow[PRI_DOB]),
 		WasConvicted:         strings.HasPrefix(rawRow[DISP_DESCR], "CONVICTED"),
+		IsArrest:             strings.HasPrefix(rawRow[STP_TYPE_DESCR], "ARREST"),
 		CodeSection:          findCodeSection(rawRow),
 		DispositionDate:      parseDate(dateFormat, rawRow[STP_EVENT_DATE]),
 		OFN:                  rawRow[OFN],

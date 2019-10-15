@@ -7,24 +7,25 @@ import (
 )
 
 type EligibilityInfo struct {
-	NumberOfConvictionsOnRecord    int
-	DateOfConviction               time.Time
-	YearsSinceThisConviction       float64
-	YearsSinceMostRecentConviction float64
-	NumberOfProp64Convictions      int
-	NumberOf11357Convictions       int
-	NumberOf11358Convictions       int
-	NumberOf11359Convictions       int
-	NumberOf11360Convictions       int
-	comparisonTime                 time.Time
-	OccurredAfterEffectiveDate     string
-	Superstrikes                   string
-	PC290CodeSections              string
-	PC290Registration              string
-	EligibilityDetermination       string
-	EligibilityReason              string
-	CaseNumber                     string
-	Deceased                       string
+	NumberOfConvictionsOnRecord          int
+	DateOfConviction                     time.Time
+	YearsSinceThisConviction             float64
+	YearsSinceMostRecentConviction       float64
+	NumberOfProp64Convictions            int
+	NumberOf11357Convictions             int
+	NumberOf11358Convictions             int
+	NumberOf11359Convictions             int
+	NumberOf11360Convictions             int
+	comparisonTime                       time.Time
+	OccurredAfterEffectiveDate           string
+	Superstrikes                         string
+	PC290CodeSections                    string
+	PC290Registration                    string
+	EligibilityDetermination             string
+	EligibilityReason                    string
+	CaseNumber                           string
+	Deceased                             string
+	PotentiallyEligibleRelatedConviction string
 }
 
 func NewEligibilityInfo(row *DOJRow, subject *Subject, comparisonTime time.Time, county string) *EligibilityInfo {
@@ -170,4 +171,8 @@ func (info *EligibilityInfo) SetMaybeEligible(reason string) {
 func (info *EligibilityInfo) SetHandReview(reason string) {
 	info.EligibilityDetermination = "Hand Review"
 	info.EligibilityReason = strings.TrimSpace(reason)
+}
+
+func (info *EligibilityInfo) SetPotentiallyEligibleRelatedConviction() {
+	info.PotentiallyEligibleRelatedConviction = "Potentially Eligible"
 }
