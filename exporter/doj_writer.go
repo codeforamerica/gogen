@@ -27,6 +27,9 @@ var EligiblityHeaders = []string{
 	"Deceased",
 	"Eligibility Determination",
 	"Eligibility Reason",
+}
+
+var RelatedChargeHeaders = []string{
 	"Potentially Eligible Related Charge",
 }
 
@@ -134,7 +137,6 @@ var DojCondensedHeaders = []string{
 	"PRI_DOB",
 	"RACE_DESCR",
 	"CYC_DATE",
-	"CYC_ORDER",
 	"STP_EVENT_DATE",
 	"STP_ORI_DESCR",
 	"STP_ORI_CNTY_NAME",
@@ -154,6 +156,7 @@ var DojCondensedHeaders = []string{
 type DOJWriter interface {
 	WriteEntryWithEligibilityInfo([]string, *data.EligibilityInfo, string)
 	WriteCondensedEntryWithEligibilityInfo([]string, *data.EligibilityInfo, string)
+	WriteRelatedChargesEntry([]string, *data.EligibilityInfo)
 	Write([]string)
 	Flush()
 }
@@ -191,6 +194,11 @@ func NewCondensedDOJWriter(outputFilePath string) (DOJWriter, error) {
 	return NewWriter(outputFilePath, headers)
 }
 
+func NewRelatedChargeDOJWriter(outputFilePath string) (DOJWriter, error) {
+	headers := append(DojFullHeaders, RelatedChargeHeaders...)
+	return NewWriter(outputFilePath, headers)
+}
+
 func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo, possibleOtherP64Charges string) {
 	var eligibilityCols []string
 	if info != nil {
@@ -213,16 +221,25 @@ func (cw csvWriter) WriteEntryWithEligibilityInfo(entry []string, info *data.Eli
 			info.Deceased,
 			info.EligibilityDetermination,
 			info.EligibilityReason,
-			info.PotentiallyEligibleRelatedConviction,
 		}
-		fmt.Println("og info")
-		fmt.Println(info.PotentiallyEligibleRelatedConviction)
 	} else {
 		eligibilityCols = make([]string, len(EligiblityHeaders))
 		eligibilityCols[2] = possibleOtherP64Charges
 	}
 
 	cw.Write(append(entry, eligibilityCols...))
+}
+
+func (cw csvWriter) WriteRelatedChargesEntry(entry []string, info *data.EligibilityInfo) {
+	var relatedChargeCols []string
+	if info != nil {
+		relatedChargeCols = []string{
+			info.PotentiallyEligibleRelatedConviction,
+		}
+	} else {
+		relatedChargeCols = make([]string, len(RelatedChargeHeaders))
+	}
+	cw.Write(append(entry, relatedChargeCols...))
 }
 
 func (cw csvWriter) WriteCondensedEntryWithEligibilityInfo(entry []string, info *data.EligibilityInfo, possibleOtherP64Charges string) {

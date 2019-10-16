@@ -14,10 +14,11 @@ type DataExporter struct {
 	normalFlowEligibilities                 map[int]*data.EligibilityInfo
 	dismissAllProp64Eligibilities           map[int]*data.EligibilityInfo
 	dismissAllProp64AndRelatedEligibilities map[int]*data.EligibilityInfo
-	findRelatedCharges map[int]*data.EligibilityInfo
+	findRelatedChargesFlow                  map[int]*data.EligibilityInfo
 	outputDOJWriter                         DOJWriter
 	outputCondensedDOJWriter                DOJWriter
 	outputProp64ConvictionsDOJWriter        DOJWriter
+	outputRelatedChargesWriter              DOJWriter
 	outputJsonFilePath                      string
 }
 
@@ -47,6 +48,7 @@ func NewDataExporter(
 	outputDOJWriter DOJWriter,
 	outputCondensedDOJWriter DOJWriter,
 	outputProp64ConvictionsDOJWriter DOJWriter,
+	outputRelatedChargesWriter DOJWriter,
 ) DataExporter {
 
 	return DataExporter{
@@ -54,10 +56,11 @@ func NewDataExporter(
 		normalFlowEligibilities:                 countyEligibilities,
 		dismissAllProp64Eligibilities:           dismissAllProp64Eligibilities,
 		dismissAllProp64AndRelatedEligibilities: dismissAllProp64AndRelatedEligibilities,
-		findRelatedCharges: findRelatedCharges,
+		findRelatedChargesFlow:                  findRelatedCharges,
 		outputDOJWriter:                         outputDOJWriter,
 		outputCondensedDOJWriter:                outputCondensedDOJWriter,
 		outputProp64ConvictionsDOJWriter:        outputProp64ConvictionsDOJWriter,
+		outputRelatedChargesWriter:              outputRelatedChargesWriter,
 	}
 }
 
@@ -65,6 +68,7 @@ func (d *DataExporter) Export(county string, configurableEligibilityFlow data.Co
 	for i, row := range d.dojInformation.Rows {
 		possibleOtherP64Charges := PossibleP64ChargeOnlyInComment(row[data.OFFENSE_DESCR], row[data.COMMENT_TEXT])
 		d.outputDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
+		d.outputRelatedChargesWriter.WriteRelatedChargesEntry(row, d.findRelatedChargesFlow[i])
 		d.outputCondensedDOJWriter.WriteCondensedEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
 		if d.normalFlowEligibilities[i] != nil {
 			d.outputProp64ConvictionsDOJWriter.WriteEntryWithEligibilityInfo(row, d.normalFlowEligibilities[i], possibleOtherP64Charges)
@@ -72,6 +76,7 @@ func (d *DataExporter) Export(county string, configurableEligibilityFlow data.Co
 	}
 
 	d.outputDOJWriter.Flush()
+	d.outputRelatedChargesWriter.Flush()
 	d.outputCondensedDOJWriter.Flush()
 	d.outputProp64ConvictionsDOJWriter.Flush()
 	return d.NewSummary(county, configurableEligibilityFlow)

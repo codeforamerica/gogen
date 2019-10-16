@@ -54,6 +54,7 @@ var _ = Describe("DataExporter", func() {
 			dojWriter, _ := NewDOJWriter(dojResultsPath)
 			dojCondensedWriter, _ := NewCondensedDOJWriter(dojCondensedResultsPath)
 			dojProp64ConvictionsWriter, _ := NewDOJWriter(path.Join(outputDir, "convictions.csv"))
+			dojRelatedChargesWriter, _ := NewRelatedChargeDOJWriter(path.Join(outputDir, "related_charges.csv"))
 
 			dataExporter = NewDataExporter(
 				dojInformation,
@@ -63,7 +64,8 @@ var _ = Describe("DataExporter", func() {
 				findRelatedCharges,
 				dojWriter,
 				dojCondensedWriter,
-				dojProp64ConvictionsWriter)
+				dojProp64ConvictionsWriter,
+				dojRelatedChargesWriter)
 		})
 
 		It("runs and has condensed output", func() {
@@ -113,6 +115,7 @@ var _ = Describe("DataExporter", func() {
 			dojWriter, _ := NewDOJWriter(path.Join(outputDir, "results.csv"))
 			dojCondensedWriter, _ := NewDOJWriter(path.Join(outputDir, "condensed.csv"))
 			dojProp64ConvictionsWriter, _ := NewDOJWriter(path.Join(outputDir, "convictions.csv"))
+			dojRelatedChargesWriter, _ := NewRelatedChargeDOJWriter(path.Join(outputDir, "related_charges.csv"))
 
 			dataExporter = NewDataExporter(
 				dojInformation,
@@ -122,7 +125,8 @@ var _ = Describe("DataExporter", func() {
 				findRelatedCharges,
 				dojWriter,
 				dojCondensedWriter,
-				dojProp64ConvictionsWriter)
+				dojProp64ConvictionsWriter,
+				dojRelatedChargesWriter)
 		})
 
 		It("runs and has condensed output", func() {
@@ -172,6 +176,7 @@ var _ = Describe("DataExporter", func() {
 			dojWriter, _ := NewDOJWriter(path.Join(outputDir, "results.csv"))
 			dojCondensedWriter, _ := NewDOJWriter(path.Join(outputDir, "condensed.csv"))
 			dojProp64ConvictionsWriter, _ := NewDOJWriter(path.Join(outputDir, "convictions.csv"))
+			dojRelatedChargesWriter, _ := NewRelatedChargeDOJWriter(path.Join(outputDir, "related_charges.csv"))
 
 			dataExporter = NewDataExporter(
 				dojInformation,
@@ -181,7 +186,8 @@ var _ = Describe("DataExporter", func() {
 				findRelatedCharges,
 				dojWriter,
 				dojCondensedWriter,
-				dojProp64ConvictionsWriter)
+				dojProp64ConvictionsWriter,
+				dojRelatedChargesWriter)
 		})
 
 		It("runs and has output", func() {
@@ -227,6 +233,7 @@ var _ = Describe("DataExporter", func() {
 			dojWriter, _ := NewDOJWriter(path.Join(outputDir, "results.csv"))
 			dojCondensedWriter, _ := NewDOJWriter(path.Join(outputDir, "condensed.csv"))
 			dojProp64ConvictionsWriter, _ := NewDOJWriter(path.Join(outputDir, "convictions.csv"))
+			dojRelatedChargesWriter, _ := NewRelatedChargeDOJWriter(path.Join(outputDir, "related_charges.csv"))
 
 			dataExporter = NewDataExporter(
 				dojInformation,
@@ -236,14 +243,15 @@ var _ = Describe("DataExporter", func() {
 				findRelatedCharges,
 				dojWriter,
 				dojCondensedWriter,
-				dojProp64ConvictionsWriter)
+				dojProp64ConvictionsWriter,
+				dojRelatedChargesWriter)
 		})
 
-		FIt("runs and has output", func() {
+		It("runs and has output", func() {
 			dataExporter.Export(COUNTY, flow)
 			format.TruncatedDiff = false
 
-			pathToDOJOutput, err := path.Abs(path.Join(outputDir, "results.csv"))
+			pathToDOJOutput, err := path.Abs(path.Join(outputDir, "related_charges.csv"))
 			Expect(err).ToNot(HaveOccurred())
 			OutputDOJFile, err := os.Open(pathToDOJOutput)
 			Expect(err).ToNot(HaveOccurred())

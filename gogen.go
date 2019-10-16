@@ -116,6 +116,7 @@ func (r runOpts) Execute(args []string) error {
 		dojFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
 		condensedFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "All_Results_Condensed%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
 		prop64ConvictionsFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "Prop64_Results%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
+		relatedChargesFilePath := utilities.GenerateIndexedFileName(r.OutputFolder, "Related_Charges%s.csv", fileIndex, len(inputFiles), r.FileNameSuffix)
 
 		dojWriter, err := exporter.NewDOJWriter(dojFilePath)
 		if err != nil {
@@ -132,6 +133,11 @@ func (r runOpts) Execute(args []string) error {
 			runErrors[inputFile] = utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}
 			continue
 		}
+		relatedChargesDojWriter, err := exporter.NewRelatedChargeDOJWriter(relatedChargesFilePath)
+		if err != nil {
+			runErrors[inputFile] = utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}
+			continue
+		}
 
 		dataExporter := exporter.NewDataExporter(
 			dojInformation,
@@ -141,7 +147,8 @@ func (r runOpts) Execute(args []string) error {
 			findRelatedCharges,
 			dojWriter,
 			condensedDojWriter,
-			prop64ConvictionsDojWriter)
+			prop64ConvictionsDojWriter,
+			relatedChargesDojWriter)
 
 		fileSummary := dataExporter.Export(r.County, configurableEligibilityFlow)
 		runSummary = dataExporter.AccumulateSummaryData(runSummary, fileSummary)

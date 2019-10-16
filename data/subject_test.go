@@ -58,7 +58,6 @@ var _ = Describe("Subject", func() {
 			expectedConviction4 := conviction4
 			expectedConviction5 := conviction5
 
-			expectedArrest.HasProp64ChargeInCycle = true
 			expectedConviction1.HasProp64ChargeInCycle = true
 			expectedConviction2.HasProp64ChargeInCycle = false
 			expectedConviction3.HasProp64ChargeInCycle = false
