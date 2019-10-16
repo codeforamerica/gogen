@@ -85,7 +85,7 @@ func (ef findRelatedChargesFlow) ChecksRelatedCharges() bool {
 func (ef findRelatedChargesFlow) BeginEligibilityFlow(info *EligibilityInfo, row *DOJRow, subject *Subject) {
 	stpOrder := row.CountOrder[0:3]
 	prop64ArrestInSameCycle := subject.CyclesWithProp64Arrest[stpOrder]
-	if matchers.IsRelatedCharge(row.CodeSection) && prop64ArrestInSameCycle {
+	if matchers.IsRelatedCharge(row.CodeSection) && prop64ArrestInSameCycle && row.WasConvicted {
 		info.SetPotentiallyEligibleRelatedConviction()
 	}
 }
