@@ -19,7 +19,7 @@ type DOJInformation struct {
 	checksRelatedCharges bool
 }
 
-func (i *DOJInformation) aggregateSubjects(eligibilityFlow EligibilityFlow) {
+func (i *DOJInformation) aggregateSubjects() {
 	totalRows := len(i.Rows)
 
 	fmt.Println("Reading DOJ Data Into Memory")
@@ -32,7 +32,7 @@ func (i *DOJInformation) aggregateSubjects(eligibilityFlow EligibilityFlow) {
 		if i.Subjects[dojRow.SubjectID] == nil {
 			i.Subjects[dojRow.SubjectID] = new(Subject)
 		}
-		i.Subjects[dojRow.SubjectID].PushRow(dojRow, eligibilityFlow)
+		i.Subjects[dojRow.SubjectID].PushRow(dojRow)
 
 		totalTime += time.Since(startTime)
 
@@ -156,7 +156,7 @@ func NewDOJInformation(dojFileName string, comparisonTime time.Time, eligibility
 		checksRelatedCharges: eligibilityFlow.ChecksRelatedCharges(),
 	}
 
-	info.aggregateSubjects(eligibilityFlow)
+	info.aggregateSubjects()
 
 	return &info, utilities.GogenError{}
 }
@@ -240,19 +240,6 @@ func (i *DOJInformation) countIndividualsFilteredByFullRelief(
 	return countIndividuals
 }
 
-func countByCodeSectionAndEligibilityDetermination(
-	conviction *DOJRow,
-	codeSection string,
-	eligibilities map[int]*EligibilityInfo,
-	convictionMap map[string]map[string]int) map[string]map[string]int {
-	eligibilityDetermination := eligibilities[conviction.Index].EligibilityDetermination
-	if convictionMap[eligibilityDetermination] == nil {
-		convictionMap[eligibilityDetermination] = make(map[string]int)
-	}
-	convictionMap[eligibilityDetermination][codeSection]++
-	return convictionMap
-}
-
 func countByEligibilityDeterminationAndReason(
 	conviction *DOJRow,
 	_ string,
@@ -281,10 +268,6 @@ func (i *DOJInformation) TotalConvictionsInCountyFiltered(county string, convict
 
 func countyFilter(county string, conviction *DOJRow) bool {
 	return conviction.County == county
-}
-
-func emptyFilter(_ string, _ *DOJRow) bool {
-	return true
 }
 
 func hasConvictionFilter(conviction *DOJRow) bool {

@@ -19,7 +19,7 @@ type Subject struct {
 	IsDeceased              bool
 }
 
-func (subject *Subject) PushRow(row DOJRow, eligibilityFlow EligibilityFlow) {
+func (subject *Subject) PushRow(row DOJRow) {
 	if subject.ID == "" {
 		subject.ID = row.SubjectID
 		subject.Name = row.Name
@@ -158,17 +158,6 @@ func setAppend(arr []string, item string) []string {
 		}
 	}
 	return append(arr, item)
-}
-
-func (subject *Subject) computeEligibilities(infos map[int]*EligibilityInfo, comparisonTime time.Time, county string) {
-	for _, row := range subject.Convictions {
-		if row.County == county {
-			eligibilityInfo := NewEligibilityInfo(row, subject, comparisonTime, county)
-			if eligibilityInfo != nil {
-				infos[row.Index] = eligibilityInfo
-			}
-		}
-	}
 }
 
 func (subject *Subject) olderThan(years int, t time.Time) bool {

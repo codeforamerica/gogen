@@ -105,7 +105,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, conviction2, nonProp64conviction, otherCountyConviction, registration, nonConviction}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 			})
 
@@ -200,7 +200,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, conviction2, conviction3, conviction4, conviction5, other_county_conviction}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 			})
 
@@ -272,7 +272,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{attemptedCodeSectionConviction, missingCodeSectionLettersConviction, wrongCodeSectionLettersConviction}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 			})
 
@@ -384,7 +384,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, conviction2, conviction3, conviction4, conviction5, conviction6}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 			})
 
@@ -451,7 +451,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, under21Conviction, conviction3}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 			})
 
@@ -546,7 +546,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, dismissableByYearsSinceConvictionThreshold}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				infos := flow.ProcessSubject(&subject, comparisonTime, COUNTY)
@@ -584,7 +584,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, dismissableByYearsSinceConvictionThreshold}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				infos := flow.ProcessSubject(&subject, comparisonTime, COUNTY)
@@ -642,7 +642,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, dismissableByYearsSinceConvictionThreshold}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				infos := flow.ProcessSubject(&subject, comparisonTime, COUNTY)
@@ -718,7 +718,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, potentiallyDismissableConviction, mostRecentConviction}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				infos := flow.ProcessSubject(&subject, comparisonTime, COUNTY)
@@ -770,7 +770,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, potentiallyDismissableConviction, mostRecentConviction}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				infos := flow.ProcessSubject(&subject, comparisonTime, COUNTY)
@@ -845,7 +845,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{conviction1, potentiallyDismissableConviction, mostRecentConviction}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				infos := flow.ProcessSubject(&subject, comparisonTime, COUNTY)
@@ -905,7 +905,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{prop64Conviction1, prop64Conviction2, prop64Conviction3}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				flow, _ = NewConfigurableEligibilityFlow(EligibilityOptions{
@@ -943,7 +943,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{prop64Conviction1, prop64Conviction2, prop64Conviction3, nonProp64Conviction1}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				flow, _ = NewConfigurableEligibilityFlow(EligibilityOptions{
@@ -1027,7 +1027,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{prop64Conviction1, prop64Conviction2, prop64Conviction3, randomConviction1}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				subject.IsDeceased = true
@@ -1067,7 +1067,7 @@ var _ = Describe("ConfigurableEligibilityFlow", func() {
 				rows := []DOJRow{prop64Conviction1}
 				subject = Subject{}
 				for _, row := range rows {
-					subject.PushRow(row, flow)
+					subject.PushRow(row)
 				}
 
 				subject.IsDeceased = true
