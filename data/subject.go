@@ -10,11 +10,11 @@ type Subject struct {
 	Name                    string
 	DOB                     time.Time
 	Convictions             []*DOJRow
-	ArrestsAndConvictions             []*DOJRow
+	ArrestsAndConvictions   []*DOJRow
 	seenConvictions         map[string]bool
 	PC290Registration       bool
 	CyclesWithProp64Charges map[string]bool
-	CyclesWithProp64Arrest map[string]bool
+	CyclesWithProp64Arrest  map[string]bool
 	CaseNumbers             map[string][]string
 	IsDeceased              bool
 }
