@@ -31,6 +31,7 @@ var EligiblityHeaders = []string{
 
 var RelatedChargeHeaders = []string{
 	"Potentially Eligible Related Charge",
+	"Other Charges in Arrest",
 }
 
 var DojFullHeaders = []string{
@@ -235,6 +236,7 @@ func (cw csvWriter) WriteRelatedChargesEntry(entry []string, info *data.Eligibil
 	if info != nil {
 		relatedChargeCols = []string{
 			info.PotentiallyEligibleRelatedConviction,
+			info.RelatedChargeArrests,
 		}
 	} else {
 		relatedChargeCols = make([]string, len(RelatedChargeHeaders))

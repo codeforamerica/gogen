@@ -26,6 +26,7 @@ type EligibilityInfo struct {
 	CaseNumber                           string
 	Deceased                             string
 	PotentiallyEligibleRelatedConviction string
+	RelatedChargeArrests				 string
 }
 
 func NewEligibilityInfo(row *DOJRow, subject *Subject, comparisonTime time.Time, county string) *EligibilityInfo {
@@ -175,4 +176,8 @@ func (info *EligibilityInfo) SetHandReview(reason string) {
 
 func (info *EligibilityInfo) SetPotentiallyEligibleRelatedConviction() {
 	info.PotentiallyEligibleRelatedConviction = "Potentially Eligible"
+}
+
+func (info *EligibilityInfo) SetRelatedChargeArrest(charges string) {
+	info.RelatedChargeArrests = charges
 }

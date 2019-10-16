@@ -5,10 +5,25 @@ import (
 	"time"
 )
 
+type Cycle struct {
+	Steps					[]*DOJRow
+}
+
+func (cycle *Cycle) Arrests() []*DOJRow {
+	var arrests []*DOJRow
+	for _, row := range cycle.Steps {
+		if row != nil && row.IsArrest {
+			arrests = append(arrests, row)
+		}
+	}
+	return arrests
+}
+
 type Subject struct {
 	ID                      string
 	Name                    string
 	DOB                     time.Time
+	Cycles					map[string]*Cycle
 	Convictions             []*DOJRow
 	ArrestsAndConvictions   []*DOJRow
 	seenConvictions         map[string]bool
@@ -28,7 +43,16 @@ func (subject *Subject) PushRow(row DOJRow) {
 		subject.CyclesWithProp64Charges = make(map[string]bool)
 		subject.CyclesWithProp64Arrest = make(map[string]bool)
 		subject.CaseNumbers = make(map[string][]string)
+		subject.Cycles = make(map[string]*Cycle)
 	}
+	if subject.Cycles[row.CountOrder[0:3]] != nil{
+		subject.Cycles[row.CountOrder[0:3]].Steps = append(subject.Cycles[row.CountOrder[0:3]].Steps, &row)
+	} else {
+		cycle := Cycle{}
+		cycle.Steps = append(cycle.Steps, &row)
+		subject.Cycles[row.CountOrder[0:3]] = &cycle
+	}
+
 	if row.WasConvicted && subject.seenConvictions[row.CountOrder] {
 		lastConviction := subject.Convictions[len(subject.Convictions)-1]
 		newEndDate := lastConviction.SentenceEndDate.Add(row.SentencePartDuration)

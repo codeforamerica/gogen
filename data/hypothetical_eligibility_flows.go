@@ -2,6 +2,7 @@ package data
 
 import (
 	"gogen/matchers"
+	"strings"
 	"time"
 )
 
@@ -83,9 +84,14 @@ func (ef findRelatedChargesFlow) ChecksRelatedCharges() bool {
 }
 
 func (ef findRelatedChargesFlow) BeginEligibilityFlow(info *EligibilityInfo, row *DOJRow, subject *Subject) {
-	stpOrder := row.CountOrder[0:3]
-	prop64ArrestInSameCycle := subject.CyclesWithProp64Arrest[stpOrder]
+	cycOrder := row.CountOrder[0:3]
+	prop64ArrestInSameCycle := subject.CyclesWithProp64Arrest[cycOrder]
 	if matchers.IsRelatedCharge(row.CodeSection) && prop64ArrestInSameCycle && row.WasConvicted {
+		var arrestCodes []string
+		for _, arrest := range subject.Cycles[cycOrder].Arrests() {
+			arrestCodes = append(arrestCodes, arrest.CodeSection)
+		}
+		info.SetRelatedChargeArrest(strings.Join(arrestCodes, "; "))
 		info.SetPotentiallyEligibleRelatedConviction()
 	}
 }
