@@ -1,4 +1,4 @@
-package data
+package matchers
 
 import (
 	"regexp"

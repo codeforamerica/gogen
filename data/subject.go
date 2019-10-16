@@ -84,7 +84,7 @@ func (subject *Subject) MostRecentConvictionDate() time.Time {
 func (subject *Subject) SuperstrikeCodeSections() []string {
 	var result []string
 	for _, row := range subject.Convictions {
-		if IsSuperstrike(row.CodeSection) {
+		if matchers.IsSuperstrike(row.CodeSection) {
 			result = append(result, row.CodeSection)
 		}
 	}
@@ -95,7 +95,7 @@ func (subject *Subject) PC290CodeSections() []string {
 	var result []string
 
 	for _, row := range subject.Convictions {
-		if IsPC290(row.CodeSection) {
+		if matchers.IsPC290(row.CodeSection) {
 			result = append(result, row.CodeSection)
 		}
 	}

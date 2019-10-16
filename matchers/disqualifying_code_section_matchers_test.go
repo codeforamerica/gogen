@@ -1,9 +1,9 @@
-package data_test
+package matchers_test
 
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"gogen/data"
+	"gogen/matchers"
 )
 
 var _ = Describe("IsSuperstrike", func() {
@@ -80,7 +80,7 @@ var _ = Describe("IsSuperstrike", func() {
 		}
 
 		for _, validSuperstrike := range validSuperstrikes {
-			Expect(data.IsSuperstrike(validSuperstrike)).To(BeTrue(), "Failed on example "+validSuperstrike)
+			Expect(matchers.IsSuperstrike(validSuperstrike)).To(BeTrue(), "Failed on example "+validSuperstrike)
 		}
 	})
 
@@ -104,7 +104,7 @@ var _ = Describe("IsSuperstrike", func() {
 		}
 
 		for _, validSuperstrike := range validSuperstrikes {
-			Expect(data.IsSuperstrike(validSuperstrike)).To(BeTrue(), "Failed on example "+validSuperstrike)
+			Expect(matchers.IsSuperstrike(validSuperstrike)).To(BeTrue(), "Failed on example "+validSuperstrike)
 		}
 	})
 
@@ -150,7 +150,7 @@ var _ = Describe("IsSuperstrike", func() {
 		}
 
 		for _, nonSuperstrike := range nonSuperstrikes {
-			Expect(data.IsSuperstrike(nonSuperstrike)).To(BeFalse(), "Failed on example "+nonSuperstrike)
+			Expect(matchers.IsSuperstrike(nonSuperstrike)).To(BeFalse(), "Failed on example "+nonSuperstrike)
 		}
 	})
 })
@@ -206,7 +206,7 @@ var _ = Describe("IsPC290", func() {
 		}
 
 		for _, validPC290 := range validPC290s {
-			Expect(data.IsPC290(validPC290)).To(BeTrue(), "Failed on example "+validPC290)
+			Expect(matchers.IsPC290(validPC290)).To(BeTrue(), "Failed on example "+validPC290)
 		}
 	})
 
@@ -239,7 +239,7 @@ var _ = Describe("IsPC290", func() {
 		}
 
 		for _, nonPC290 := range nonPC290s {
-			Expect(data.IsPC290(nonPC290)).To(BeFalse(), "Failed on example "+nonPC290)
+			Expect(matchers.IsPC290(nonPC290)).To(BeFalse(), "Failed on example "+nonPC290)
 		}
 	})
 })
