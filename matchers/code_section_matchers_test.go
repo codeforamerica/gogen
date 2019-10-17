@@ -36,6 +36,7 @@ var _ = Describe("MatchedCodeSection", func() {
 
 	It("returns empty string if there is no match", func() {
 		Expect(getMatchedCodeSection("12345(c) HS")).To(Equal(""))
+		Expect(getMatchedCodeSection("322 PC")).To(Equal(""))
 		Expect(getMatchedCodeSection("647(f) HS")).To(Equal(""))
 		Expect(getMatchedCodeSection("4050.6 BP")).To(Equal(""))
 		Expect(getMatchedCodeSection("14859 PC")).To(Equal(""))
@@ -47,6 +48,7 @@ var _ = Describe("MatchedCodeSection", func() {
 		Expect(getMatchedCodeSection("4060    BP")).To(Equal(""))
 		Expect(getMatchedCodeSection("--40508 VC--")).To(Equal(""))
 		Expect(getMatchedCodeSection("1320(a) PC")).To(Equal(""))
+		Expect(getMatchedCodeSection("186.22(A) PC")).To(Equal(""))
 	})
 
 	It("recognizes attempted code sections for Prop 64", func() {
@@ -60,7 +62,6 @@ var _ = Describe("MatchedCodeSection", func() {
 var _ = Describe("MatchedRelatedCodeSection", func() {
 	It("returns the matched substring for a given related charge code section", func() {
 		Expect(getMatchedRelatedChargeCodeSection("32 PC-ACCESSORY")).To(Equal("32 PC"))
-		Expect(getMatchedRelatedChargeCodeSection("186.22(A) PC-PARTICIPATE:CRIM ST GANG")).To(Equal("186.22(A) PC"))
 		Expect(getMatchedRelatedChargeCodeSection("11366 HS-KEEP PLACE SELL CNTL SUB")).To(Equal("11366 HS"))
 		Expect(getMatchedRelatedChargeCodeSection("11366.5 HS")).To(Equal("11366.5 HS"))
 		Expect(getMatchedRelatedChargeCodeSection("--11366.5(A)HS--")).To(Equal("11366.5(A)HS"))
@@ -68,7 +69,15 @@ var _ = Describe("MatchedRelatedCodeSection", func() {
 		Expect(getMatchedRelatedChargeCodeSection("11366.5(C) HS-VIOL")).To(Equal("11366.5(C) HS"))
 	})
 
+	It("recognizes attemped code sections for related charges", func() {
+		Expect(getMatchedRelatedChargeCodeSection("664.32 PC")).To(Equal("32 PC"))
+		Expect(getMatchedRelatedChargeCodeSection("66432 PC")).To(Equal("32 PC"))
+		Expect(getMatchedRelatedChargeCodeSection("664-32 PC")).To(Equal("32 PC"))
+		Expect(getMatchedRelatedChargeCodeSection("664/32 PC")).To(Equal("32 PC"))
+	})
+
 	It("returns empty string if there is no match", func() {
+		Expect(getMatchedRelatedChargeCodeSection("186.22(A) PC")).To(Equal(""))
 		Expect(getMatchedRelatedChargeCodeSection("12345(c) HS")).To(Equal(""))
 		Expect(getMatchedRelatedChargeCodeSection("647(f) HS")).To(Equal(""))
 		Expect(getMatchedRelatedChargeCodeSection("4050.6 BP")).To(Equal(""))

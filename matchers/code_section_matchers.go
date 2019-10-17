@@ -5,8 +5,7 @@ import (
 )
 
 var prop64matcher = regexp.MustCompile(`(11357|11358|11359|11360)`)
-// Does not include 664 CP-ATTEMPT CRIME
-var relatedChargeMatcher = regexp.MustCompile(`(32\s*PC|186\.22\s*\(A\)\s*PC|11366\s*HS|11366\.5\s*[^\(]HS|11366\.5\s*\([ABC]\)\s*HS)`)
+var relatedChargeMatcher = regexp.MustCompile(`(32\s*PC|11366\s*HS|11366\.5\s*[^\(]HS|11366\.5\s*\([ABC]\)\s*HS)`)
 
 var Prop64MatchersByCodeSection = map[string]*regexp.Regexp{
 	"11357":                 regexp.MustCompile(`11357.*`),
