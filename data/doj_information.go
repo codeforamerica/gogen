@@ -117,13 +117,9 @@ OuterLoop:
 
 func (i *DOJInformation) CountPotentiallyEligibleRelatedConvictions(eligibilities map[int]*EligibilityInfo) int {
 	countConvictions := 0
-	OuterLoop:
 	for _, subject := range i.Subjects {
 		for _, conviction := range subject.Convictions {
-			if eligibilities[conviction.Index] == nil{
-				continue OuterLoop
-			}
-			if eligibilities[conviction.Index].PotentiallyEligibleRelatedConviction != "" {
+			if eligibilities[conviction.Index] != nil && eligibilities[conviction.Index].PotentiallyEligibleRelatedConviction != "" {
 				countConvictions++
 			}
 		}
