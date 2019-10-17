@@ -354,6 +354,7 @@ var _ = Describe("gogen", func() {
 				"Individual is deceased":                   Equal(1),
 				"Only has 11357-60 charges":                Equal(1),
 			}),
+			"CountPotentiallyEligibleRelatedConvictions": Equal(0),
 		}))
 	})
 
@@ -464,6 +465,71 @@ var _ = Describe("gogen", func() {
 					"Individual is deceased":                   Equal(2),
 					"Only has 11357-60 charges":                Equal(2),
 				}),
+				"CountPotentiallyEligibleRelatedConvictions": Equal(0),
+			}))
+		})
+
+		It("can aggregate related charges statistics for multiple input files", func() {
+			outputDir, err = ioutil.TempDir("/tmp", "gogen")
+			Expect(err).ToNot(HaveOccurred())
+
+			pathToInputExcel := path.Join("test_fixtures", "related_charges.xlsx")
+			inputCSV, _, _ := ExtractFullCSVFixtures(pathToInputExcel)
+
+			pathToGogen, err := gexec.Build("gogen")
+			Expect(err).ToNot(HaveOccurred())
+
+			pathToEligibilityOptions := path.Join("test_fixtures", "eligibility_options.json")
+
+			runCommand := "run"
+			outputsFlag := fmt.Sprintf("--outputs=%s", outputDir)
+			dojFlag := fmt.Sprintf("--input-doj=%s", inputCSV+","+inputCSV)
+			countyFlag := fmt.Sprintf("--county=%s", "SACRAMENTO")
+			computeAtFlag := "--compute-at=2019-11-11"
+			eligibilityOptionsFlag := fmt.Sprintf("--eligibility-options=%s", pathToEligibilityOptions)
+
+			command := exec.Command(pathToGogen, runCommand, outputsFlag, dojFlag, countyFlag, computeAtFlag, eligibilityOptionsFlag)
+			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			Expect(err).ToNot(HaveOccurred())
+
+			Eventually(session).Should(gexec.Exit(0))
+
+			summary := GetOutputSummary(path.Join(outputDir, "gogen.json"))
+			Expect(summary).To(gstruct.MatchAllFields(gstruct.Fields{
+				"County":                  Equal("SACRAMENTO"),
+				"LineCount":               Equal(22),
+				"EarliestConviction":      Equal(time.Date(1979, 6, 1, 0, 0, 0, 0, time.UTC)),
+				"ProcessingTimeInSeconds": BeNumerically(">", 0),
+				"ReliefWithCurrentEligibilityChoices": gstruct.MatchAllKeys(gstruct.Keys{
+					"CountSubjectsNoFelony":               Equal(0),
+					"CountSubjectsNoConviction":           Equal(0),
+					"CountSubjectsNoConvictionLast7Years": Equal(0),
+				}),
+				"ReliefWithDismissAllProp64": gstruct.MatchAllKeys(gstruct.Keys{
+					"CountSubjectsNoFelony":               Equal(0),
+					"CountSubjectsNoConviction":           Equal(0),
+					"CountSubjectsNoConvictionLast7Years": Equal(0),
+				}),
+				"Prop64ConvictionsCountInCountyByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
+					"11357": Equal(2),
+					"11359": Equal(2),
+				}),
+				"SubjectsWithProp64ConvictionCountInCounty": Equal(2),
+				"Prop64FelonyConvictionsCountInCounty":      Equal(4),
+				"Prop64NonFelonyConvictionsCountInCounty":   Equal(0),
+				"SubjectsWithSomeReliefCount":               Equal(2),
+				"ConvictionDismissalCountByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
+					"11357": Equal(2),
+					"11358": Equal(0),
+				}),
+				"ConvictionReductionCountByCodeSection": gstruct.MatchAllKeys(gstruct.Keys{
+					"11359": Equal(0),
+					"11360": Equal(0),
+				}),
+				"ConvictionDismissalCountByAdditionalRelief": gstruct.MatchAllKeys(gstruct.Keys{
+					"57 years or older":                        Equal(2),
+				}),
+				"CountPotentiallyEligibleRelatedConvictions": Equal(2),
 			}))
 		})
 

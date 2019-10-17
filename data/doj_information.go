@@ -115,6 +115,22 @@ OuterLoop:
 	return countIndividuals
 }
 
+func (i *DOJInformation) CountPotentiallyEligibleRelatedConvictions(eligibilities map[int]*EligibilityInfo) int {
+	countConvictions := 0
+	OuterLoop:
+	for _, subject := range i.Subjects {
+		for _, conviction := range subject.Convictions {
+			if eligibilities[conviction.Index] == nil{
+				continue OuterLoop
+			}
+			if eligibilities[conviction.Index].PotentiallyEligibleRelatedConviction != "" {
+				countConvictions++
+			}
+		}
+	}
+	return countConvictions
+}
+
 func (i *DOJInformation) CountIndividualsNoLongerHaveFelony(eligibilities map[int]*EligibilityInfo) int {
 	return i.countIndividualsFilteredByFullRelief(eligibilities, IsFelonyFilter, reducedOrDismissedFilter)
 }
@@ -136,7 +152,6 @@ func NewDOJInformation(dojFileName string, comparisonTime time.Time, eligibility
 	bufferedReader := bufio.NewReader(dojFile)
 	sourceCSV := csv.NewReader(bufferedReader)
 	sourceCSV.FieldsPerRecord = END_OF_REC + 1;
-
 	hasHeaders, err := includesHeaders(bufferedReader)
 	if err != nil {
 		return nil, utilities.GogenError{ErrorType: "OTHER", ErrorMessage: err.Error()}

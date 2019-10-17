@@ -37,6 +37,7 @@ type Summary struct {
 	ConvictionDismissalCountByCodeSection       map[string]int `json:"convictionDismissalCountByCodeSection"`
 	ConvictionReductionCountByCodeSection       map[string]int `json:"convictionReductionCountByCodeSection"`
 	ConvictionDismissalCountByAdditionalRelief  map[string]int `json:"convictionDismissalCountByAdditionalRelief"`
+	CountPotentiallyEligibleRelatedConvictions  int            `json:"countPotentiallyEligibleRelatedConvictions"`
 }
 
 func NewDataExporter(
@@ -113,7 +114,6 @@ func PossibleP64ChargeOnlyInComment(offenseDescription, commentText string) stri
 	return ""
 }
 
-
 func (d *DataExporter) AccumulateSummaryData(runSummary Summary, fileSummary Summary) Summary {
 	return Summary{
 		County:                              fileSummary.County,
@@ -129,6 +129,7 @@ func (d *DataExporter) AccumulateSummaryData(runSummary Summary, fileSummary Sum
 		ConvictionDismissalCountByCodeSection:       utilities.AddMaps(runSummary.ConvictionDismissalCountByCodeSection, fileSummary.ConvictionDismissalCountByCodeSection),
 		ConvictionReductionCountByCodeSection:       utilities.AddMaps(runSummary.ConvictionReductionCountByCodeSection, fileSummary.ConvictionReductionCountByCodeSection),
 		SubjectsWithProp64ConvictionCountInCounty:   runSummary.SubjectsWithProp64ConvictionCountInCounty + fileSummary.SubjectsWithProp64ConvictionCountInCounty,
+		CountPotentiallyEligibleRelatedConvictions: runSummary.CountPotentiallyEligibleRelatedConvictions + fileSummary.CountPotentiallyEligibleRelatedConvictions,
 	}
 }
 
@@ -155,6 +156,7 @@ func (d *DataExporter) NewSummary(county string, configurableEligibilityFlow dat
 		Prop64FelonyConvictionsCountInCounty:        d.dojInformation.TotalConvictionsInCountyFiltered(county, data.IsFelonyFilter, matchers.IsProp64Charge),
 		Prop64NonFelonyConvictionsCountInCounty:     d.dojInformation.TotalConvictionsInCountyFiltered(county, data.IsNotFelonyFilter, matchers.IsProp64Charge),
 		SubjectsWithProp64ConvictionCountInCounty:   d.dojInformation.CountIndividualsWithProp64ConvictionInCounty(county),
+		CountPotentiallyEligibleRelatedConvictions:  d.dojInformation.CountPotentiallyEligibleRelatedConvictions(d.findRelatedChargesFlow),
 	}
 }
 
