@@ -1,5 +1,15 @@
 # Gogen
 
+🚫 **This repository has been archived**
+
+Gogen was an application created by the Clear My Record team at Code for America in 2019 to support the state of California’s implementation of H&S § 11361.9 (marijuana conviction relief).
+
+Since the deadline for the use case of this application by government was July 2020, the Clear My Record team discontinued maintenance of the application in September 2020.
+
+**Please see below for more background on the project, and please reach out to clearmyrecord@codeforamerica.org for questions.**
+
+** The Application
+
 `gogen` is a command-line tool that takes in California Department of Justice (CA DOJ) .dat files containing criminal record data and identifies convictions eligible for relief under California's Proposition 64.  
 The output is a bundle of CSV files that contain original data from the CA DOJ as well as eligibility info for relevant convictions.
 
