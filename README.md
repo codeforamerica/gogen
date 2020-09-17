@@ -70,6 +70,8 @@ $ ./generate_test_data
 ```
 
 County must be capitalized. Target size is the estimated number of rows in the produced file.
+
+**Note:** This data is entirely fabricated and should only be used to understand the functionality of Gogen.
  
 ## License
 
