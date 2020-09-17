@@ -56,6 +56,20 @@ $ gogen run
     --eligibility-options=/path/to/bearConfig.json
     --outputs=/path/to/desired/output
 ```
+
+## Generating test data
+
+We have provided a tool for generating sample data in the CA DOJ research file format for a given county, for use with Gogen.
+
+To generate data, download the `./generate_test_data` script from the releases, make it executable (`chmod +x generate_test_data`) and run the following command:
+```
+$ ./generate_test_data 
+    --county="LOS ANGELES"
+    --target-size=50000
+    --outputs=/path/to/file
+```
+
+County must be capitalized. Target size is the estimated number of rows in the produced file.
  
 ## License
 
