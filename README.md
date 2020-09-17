@@ -8,7 +8,7 @@ Since the deadline for the use case of this application by government was July 2
 
 **Please see below for more background on the project, and please reach out to clearmyrecord@codeforamerica.org for questions.**
 
-** The Application
+## The Application
 
 `gogen` is a command-line tool that takes in California Department of Justice (CA DOJ) .dat files containing criminal record data and identifies convictions eligible for relief under California's Proposition 64.  
 The output is a bundle of CSV files that contain original data from the CA DOJ as well as eligibility info for relevant convictions.
